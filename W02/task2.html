@@ -5,13 +5,13 @@
     <body>
         <script src="vec3-2.js"></script>
         <script>
-            var x0=0, y0=-1, z0=2; // (input vertex 0)
-            var x1=-1, y1=0, z1=5; // (input vertex 1)
-            var x2=1, y2=1, z2=3; // (input vertex 2)
+            var x0=1, y0=0, z0=0; // (input vertex 0)
+            var x1=0, y1=1, z1=0; // (input vertex 1)
+            var x2=0, y2=0, z2=1; // (input vertex 2)
             var v0 = new Vec3( x0, y0, z0 );
             var v1 = new Vec3( x1, y1, z1 );
             var v2 = new Vec3( x2, y2, z2 );
-            var S = AreaOfTriangle( v0, v1, v2 ); // (output value) ここの実行が終わってない
+            var S = AreaOfTriangle( v0, v1, v2 ); // (output value)
             document.write("S = "+S);
             </script>
     </body>
