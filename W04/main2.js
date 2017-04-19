@@ -10,15 +10,16 @@ function main()
     var near = 1;
     var far = 1000;
     var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-    camera.position.set( 0, 0, 5 );
+    camera.position.set( 0, 0, 3 );
     scene.add( camera );
     
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize( width, height );
+    renderer.setClearColor( 0xffffe0 );
     document.body.appendChild( renderer.domElement );
     
     var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+    var material = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
     var cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
     
@@ -31,8 +32,8 @@ function main()
     function loop()
     {
         requestAnimationFrame( loop );
-        cube.rotation.x += 0.001;
-        cube.rotation.y += 0.001;
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
         renderer.render( scene, camera );
     }
 }
