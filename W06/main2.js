@@ -13,6 +13,10 @@ function main()
     camera.position.set( 0, 0, 8 );
     scene.add( camera );
     
+    var light = new THREE.PointLight();
+    light.position.set( 10, 10, 10 );
+    scene.add( light );
+    
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize( width, height );
     renderer.setClearColor( 0xfffaf0 ); //背景色
@@ -43,7 +47,7 @@ function main()
                  [1,5,4], //f10: v1-v5-v4
                  [0,1,4] //f11: v0-v1-v4
                  ];
-
+    
     var geometry = new THREE.Geometry();
     for(i = 0;i < 8;i++){
         var v = new THREE.Vector3().fromArray( vertices[i] );
@@ -55,13 +59,41 @@ function main()
         var f = new THREE.Face3( id[0], id[1], id[2] );
         geometry.faces.push( f );
     }
-
+    
+    var material = new THREE.MeshLambertMaterial();
+    material.vertexColors = THREE.FaceColors;
+    for (i = 0;i < faces.length;i++ ){
+        geometry.faces[i].color = new THREE.Color( 0.2, 0.5, 0.2 );
+    }
     geometry.computeFaceNormals();
     
-    var material = new THREE.MeshBasicMaterial( { color: 0xff1493 } );
     material.side = THREE.DoubleSide
     var cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
+    
+    document.addEventListener( 'mousedown', mouse_down_event );
+    function mouse_down_event( event )
+    {
+        var x_win = event.clientX;
+        var y_win = event.clientY;
+        var vx = renderer.domElement.offsetLeft;
+        var vy = renderer.domElement.offsetTop;
+        var vw = renderer.domElement.width;
+        var vh = renderer.domElement.height;
+        var x_NDC = 2 * ( x_win - vx ) / vw - 1;
+        var y_NDC = -( 2 * ( y_win - vy ) / vh - 1 );
+        var p_NDC = new THREE.Vector3( x_NDC, y_NDC, 1 );
+        var p_wld = p_NDC.unproject( camera );
+        var origin = camera.position;
+        var direction = p_wld.sub( camera.position ).normalize();
+        var raycaster = new THREE.Raycaster( origin, direction );
+        var intersects = raycaster.intersectObject( cube );
+        if ( intersects.length > 0 )
+        {
+            intersects[0].face.color.setRGB( 0.7, 0, 0.5 );
+            intersects[0].object.geometry.colorsNeedUpdate = true;
+        }
+    }
     
     loop();
     
